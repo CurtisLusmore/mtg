@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>mtg</title>
+        <script src="./main.js"></script>
+        <link href="./style.css" rel="stylesheet">
+    </head>
+    <body
+        ondragover="return over(event);"
+        ondrop="return drop(event);">
+        <div id="board"></div>
+        <div id="hand"></div>
+        <div id="imgs"></div>
+        <span id="drag-img"></span>
+        <script>
+            const imgs = document.getElementById('imgs');
+            for (let i = 0; i < 7; i++) {
+                const elem = document.createElement('img');
+                elem.src = './card.png';
+                elem.id = 'img-' + i;
+                elem.className = 'card';
+                elem.draggable = true;
+                elem.ondragstart = drag;
+                elem.ondragover = over;
+                elem.ondrop = drop;
+                elem.onclick = rotate;
+                elem.height = CARD_HEIGHT;
+                elem.width = CARD_WIDTH;
+                elem.style.top = '10px';
+                elem.style.left = 10 + (10+CARD_WIDTH)*i + 'px';
+                elem.style.position = 'absolute';
+                elem.style.zIndex = 0;
+                elem.style.transform = 'rotate(0deg)';
+                imgs.appendChild(elem);
+            }
+        </script>
+    </body>
+</html>

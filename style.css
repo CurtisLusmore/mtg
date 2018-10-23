@@ -1,0 +1,15 @@
+body {
+    margin: 0;
+    width: 100%;
+}
+
+#board {
+    width: 100%;
+    height: 100vh;
+}
+
+#hand {
+    width: 100%;
+    height: 300px;
+    background-color: #eeeeee;
+}
