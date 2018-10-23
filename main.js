@@ -12,15 +12,15 @@ function rotate(ev) {
         : 'rotate(90deg)';
 }
 
+let dragData = null;
 function drag(ev) {
     bringToFront(ev);
-    const id = ev.target.id;
+    const { target } = ev;
     const dragX = ev.clientX;
     const dragY = ev.clientY;
-    const cardX = ev.target.x;
-    const cardY = ev.target.y;
-    const data = { id, dragX, dragY, cardX, cardY };
-    ev.dataTransfer.setData("text", JSON.stringify(data));
+    const cardX = +(ev.target.style.left.match(/([\d\.]+)px/)[1]);
+    const cardY = +(ev.target.style.top.match(/([\d\.]+)px/)[1]);
+    dragData = { target, dragX, dragY, cardX, cardY };
     ev.dataTransfer.dropEffect = 'move';
     ev.dataTransfer.setDragImage(document.getElementById('drag-img'), 0, 0);
 }
@@ -34,22 +34,20 @@ function snap(x, y) {
 
 function over(ev) {
     ev.preventDefault();
-    const { id, dragX, dragY, cardX, cardY } = JSON.parse(ev.dataTransfer.getData("text"));
-    const elem = document.getElementById(id);
+    const { target, dragX, dragY, cardX, cardY } = dragData;
     const dx = ev.clientX - dragX;
     const dy = ev.clientY - dragY;
     const [x, y] = snap(cardX + dx, cardY + dy);
-    elem.style.left = x + 'px';
-    elem.style.top = y + 'px';
+    target.style.left = x + 'px';
+    target.style.top = y + 'px';
 }
 
 function drop(ev) {
     ev.preventDefault();
-    const { id, dragX, dragY, cardX, cardY } = JSON.parse(ev.dataTransfer.getData("text"));
-    const elem = document.getElementById(id);
+    const { target, dragX, dragY, cardX, cardY } = dragData;
     const dx = ev.clientX - dragX;
     const dy = ev.clientY - dragY;
     const [x, y] = snap(cardX + dx, cardY + dy);
-    elem.style.left = x + 'px';
-    elem.style.top = y + 'px';
+    target.style.left = x + 'px';
+    target.style.top = y + 'px';
 }
