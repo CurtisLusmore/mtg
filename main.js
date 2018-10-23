@@ -2,7 +2,7 @@ const CARD_WIDTH = 168;
 const CARD_HEIGHT = 234;
 
 function calculateZIndex(x, y) {
-    return y*2*window.innerWidth + x;
+    return Math.round(y*2*window.innerWidth + x);
 }
 
 function createCard(id, url, x, y) {
@@ -15,6 +15,10 @@ function createCard(id, url, x, y) {
     elem.ondragover = over;
     elem.ondrop = drop;
     elem.onclick = rotate;
+    elem.onmouseover = () => elem.style.zIndex = window.innerHeight*window.innerWidth*4;
+    elem.onmouseout = () => elem.style.zIndex = calculateZIndex(
+        +elem.style.left.match(/([\d\.]+)px/)[1],
+        +elem.style.top.match(/([\d\.]+)px/)[1]);
     elem.height = CARD_HEIGHT;
     elem.width = CARD_WIDTH;
     elem.style.left = x + 'px';
@@ -45,8 +49,8 @@ function drag(ev) {
 
 function snap(x, y) {
     return [
-        Math.round(x / (CARD_WIDTH / 10)) * (CARD_WIDTH / 10),
-        Math.round(y / (CARD_HEIGHT / 10)) * CARD_HEIGHT / 10,
+        Math.round(x / (CARD_WIDTH / 5)) * (CARD_WIDTH / 5),
+        Math.round(y / (CARD_HEIGHT / 5)) * CARD_HEIGHT / 5,
     ];
 }
 
@@ -56,7 +60,7 @@ function over(ev) {
     const dx = ev.clientX - dragX;
     const dy = ev.clientY - dragY;
     const [x, y] = snap(cardX + dx, cardY + dy);
-    target.style.zIndex = Math.round(calculateZIndex(x, y));
+    target.style.zIndex = calculateZIndex(x, y);
     target.style.left = x + 'px';
     target.style.top = y + 'px';
 }
@@ -67,7 +71,7 @@ function drop(ev) {
     const dx = ev.clientX - dragX;
     const dy = ev.clientY - dragY;
     const [x, y] = snap(cardX + dx, cardY + dy);
-    target.style.zIndex = Math.round(calculateZIndex(x, y));
+    target.style.zIndex = calculateZIndex(x, y);
     target.style.left = x + 'px';
     target.style.top = y + 'px';
 }
