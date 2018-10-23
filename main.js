@@ -1,9 +1,8 @@
 const CARD_WIDTH = 168;
 const CARD_HEIGHT = 234;
 
-let zIndex = 0;
-function bringToFront(ev) {
-    ev.target.style.zIndex = ++zIndex;
+function calculateZIndex(x, y) {
+    return y*2*window.innerWidth + x;
 }
 
 function createCard(id, url, x, y) {
@@ -21,7 +20,7 @@ function createCard(id, url, x, y) {
     elem.style.left = x + 'px';
     elem.style.top = y + 'px';
     elem.style.position = 'absolute';
-    elem.style.zIndex = 0;
+    elem.style.zIndex = calculateZIndex(x, y);
     elem.style.transform = 'rotate(0deg)';
     return elem;
 }
@@ -34,7 +33,6 @@ function rotate(ev) {
 
 let dragData = null;
 function drag(ev) {
-    bringToFront(ev);
     const { target } = ev;
     const dragX = ev.clientX;
     const dragY = ev.clientY;
@@ -58,6 +56,7 @@ function over(ev) {
     const dx = ev.clientX - dragX;
     const dy = ev.clientY - dragY;
     const [x, y] = snap(cardX + dx, cardY + dy);
+    target.style.zIndex = Math.round(calculateZIndex(x, y));
     target.style.left = x + 'px';
     target.style.top = y + 'px';
 }
@@ -68,6 +67,7 @@ function drop(ev) {
     const dx = ev.clientX - dragX;
     const dy = ev.clientY - dragY;
     const [x, y] = snap(cardX + dx, cardY + dy);
+    target.style.zIndex = Math.round(calculateZIndex(x, y));
     target.style.left = x + 'px';
     target.style.top = y + 'px';
 }
