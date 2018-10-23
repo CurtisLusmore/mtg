@@ -6,6 +6,26 @@ function bringToFront(ev) {
     ev.target.style.zIndex = ++zIndex;
 }
 
+function createCard(id, url, x, y) {
+    const elem = document.createElement('img');
+    elem.src = url;
+    elem.id = 'img-' + id;
+    elem.className = 'card';
+    elem.draggable = true;
+    elem.ondragstart = drag;
+    elem.ondragover = over;
+    elem.ondrop = drop;
+    elem.onclick = rotate;
+    elem.height = CARD_HEIGHT;
+    elem.width = CARD_WIDTH;
+    elem.style.left = x + 'px';
+    elem.style.top = y + 'px';
+    elem.style.position = 'absolute';
+    elem.style.zIndex = 0;
+    elem.style.transform = 'rotate(0deg)';
+    return elem;
+}
+
 function rotate(ev) {
     ev.target.style.transform = ev.target.style.transform === 'rotate(90deg)'
         ? 'rotate(0deg)'
